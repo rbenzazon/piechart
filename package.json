@@ -1,0 +1,25 @@
+{
+  "name": "piechart",
+  "version": "1.0.0",
+  "description": "displays a pie chart and several other metrics",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbenzazon/piechart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbenzazon/piechart/issues"
+  },
+  "homepage": "https://github.com/rbenzazon/piechart#readme",
+  "devDependencies": {
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
+  }
+}
