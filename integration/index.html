@@ -14,87 +14,87 @@
         /*
         to compare with visual mockup
         */
+        /*
         #screenshot{
             background-image: url("screenshot.jpg");
         }
-
+        */
         .pie{
-            position :relative;
+            position: relative;
             font-family: inherit;
-            height:14rem;
-            width:20rem;
+            height: 14rem;
+            width: 20rem;
             /*border:1px solid green;box model debug*/
         }
         #areaGraph{
 
         }
         #donut,#tickMarks,#areaGraph{
-            position :absolute;
-            margin-top:-77px;
-            margin-left:-77px;
-            top:50%;
-            left:50%;
+            position: absolute;
+            margin-top: -77px;
+            margin-left: -77px;
+            top: 50%;
+            left: 50%;
         }
         .centerFigureText{
-            position :absolute;
-            height:3rem;
-            top:50%;
-            margin-top:-2.1rem;
-            width:100%;
+            position: absolute;
+            height: 3rem;
+            top: 50%;
+            margin-top: -2.1rem;
+            width: 100%;
             line-height: 1.4rem;
             /*border:1px solid green;box model debug*/
         }
         .centerLabel{
-            color:grey;
-            font-size:17px;
-            text-transform:uppercase;
+            color: grey;
+            font-size: 17px;
+            text-transform: uppercase;
         }
         .centerValue{
-            font-size:23px;
+            font-size: 23px;
         }
         .centerFigure{
-            position :relative;
+            position: relative;
             text-align: center;
             /*border:1px solid blue;box model debug*/
             margin-left: auto;
             margin-right: auto;
-            height:12.3rem;
-            width:15rem;
+            height: 12.3rem;
+            width: 15rem;
         }
         .leftFigure,.rightFigure{
             font-size: 14px;
-            position:absolute;
+            position: absolute;
             bottom: 0.6rem;
         }
         .leftFigure{
-            left:0;
+            left: 0;
         }
         .leftFigure>.label{
-            color:#92d657;
-            font-weight:bold;
+            color: #92d657;
         }
         .rightFigure>.label{
-            color:#507439;
-            font-weight:bold;
+            color: #507439;
         }
         .label{
             font-size: 15px;
+            font-weight: bold;
         }
         .percent{
-            margin-right:0.2rem;
+            margin-right: 0.2rem;
         }
         .value{
-            color:grey;
+            color: grey;
         }
         .rightFigure{
-            text-align:right;
-            right:0;
+            text-align: right;
+            right: 0;
         }
         .bottomFigures{
-            width:calc(100% - 4rem);
-            position:absolute;
-            border-bottom:1px solid grey;
-            margin-left:1.9rem;
+            width: calc(100% - 4rem);
+            position: absolute;
+            border-bottom: 1px solid grey;
+            margin-left: 1.9rem;
             bottom: 0;
         }
     </style>
@@ -135,6 +135,10 @@
             var radius = 77;
             var svg;
 
+            var percentScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, 2 * Math.PI]);
+
             /*
             Donut Chart
             */
@@ -146,23 +150,20 @@
                 .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-            var percentScale = d3.scaleLinear()
-                .domain([0, 100])
-                .range([0, 2 * Math.PI]);
-
             var data = [[0,40,"#507439"],[40,100,"#92d657"]];
 
             var arc = d3.arc()
                 .innerRadius(71)
                 .outerRadius(77)
-                .startAngle(function(d){return percentScale(d[0]);})
-                .endAngle(function(d){return percentScale(d[1]);});
+                .startAngle((d) => percentScale(d[0]))
+                .endAngle((d) => percentScale(d[1]));
 
             svg.selectAll("path")
                 .data(data)
                 .enter()
-                .append("path").attr("d", arc)
-                .style("fill", function(d){return d[2];});
+                .append("path")
+                .attr("d", arc)
+                .style("fill", (d) => d[2]);
 
             /*
             Tick Marks
@@ -175,10 +176,10 @@
                 .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-            var tickMarksData = [[-0.1,0.1,"#808080"],
-                [24.9,25.1,"#808080"],
-                [49.9,50.1,"#808080"],
-                [74.9,75.1,"#808080"]];
+            var tickMarksData = [[-0.1,0.1],
+                [24.9,25.1],
+                [49.9,50.1],
+                [74.9,75.1]];
 
             var tMInnerRadius = 67;
             var tMOuterRadius = 70;
@@ -186,14 +187,15 @@
             var tMArc = d3.arc()
                 .innerRadius(tMInnerRadius)
                 .outerRadius(tMOuterRadius)
-                .startAngle(function(d){return percentScale(d[0]);})
-                .endAngle(function(d){return percentScale(d[1]);});
+                .startAngle((d) => percentScale(d[0]))
+                .endAngle((d) => percentScale(d[1]));
 
             svg.selectAll("path")
                 .data(tickMarksData)
                 .enter()
-                .append("path").attr("d", tMArc)
-                .style("fill", function(d){return d[2];});
+                .append("path")
+                .attr("d", tMArc)
+                .style("fill", "#808080");
 
             /*
             Area Graph
@@ -249,9 +251,9 @@
                 .attr("stroke-opacity", 0.3)
                 .attr("clip-path","url(#circleClip)")
                 .attr("d", d3.area()
-                    .x(function(d) { return x(d[0]) })
+                    .x((d) => x(d[0]))
                     .y0(y(0))
-                    .y1(function(d) { return y(d[1]) })
+                    .y1((d) => y(d[1]))
                 )
 
         </script>
