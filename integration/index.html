@@ -11,23 +11,20 @@
         html {
             font-family: Roboto, Arial;
         }
+        /*
+        to compare with visual mockup
+        */
         #screenshot{
-            /*background-image: url("screenshot.jpg");*/
+            background-image: url("screenshot.jpg");
         }
-        span{
-            margin:0.1rem;
-        }
+
         .pie{
             position :relative;
             font-family: inherit;
             height:14rem;
             width:20rem;
-            /*border:1px solid green;*/
+            /*border:1px solid green;box model debug*/
         }
-        /*.pie>*{
-            font-family: inherit;
-            font-size: 14px;
-        }*/
         #areaGraph{
 
         }
@@ -45,7 +42,7 @@
             margin-top:-2.1rem;
             width:100%;
             line-height: 1.4rem;
-            /*border:1px solid green;*/
+            /*border:1px solid green;box model debug*/
         }
         .centerLabel{
             color:grey;
@@ -58,7 +55,7 @@
         .centerFigure{
             position :relative;
             text-align: center;
-            /*border:1px solid blue;*/
+            /*border:1px solid blue;box model debug*/
             margin-left: auto;
             margin-right: auto;
             height:12.3rem;
@@ -80,7 +77,11 @@
             color:#507439;
             font-weight:bold;
         }
+        .label{
+            font-size: 15px;
+        }
         .percent{
+            margin-right:0.2rem;
         }
         .value{
             color:grey;
@@ -94,7 +95,6 @@
             position:absolute;
             border-bottom:1px solid grey;
             margin-left:1.9rem;
-            /*margin-bottom:-0.5rem;*/
             bottom: 0;
         }
     </style>
@@ -125,61 +125,79 @@
             </div>
         </div>
         <script>
+
+            /*
+            Initial SVG values
+            */
             var width = 154;
-            height = 154;
-            margin = 10;
-            var radius = 77
-            // append the svg object to the div called 'my_dataviz'
-            var svg = d3.select("#donut")
-            .append("svg")
+            var height = 154;
+            var margin = 10;
+            var radius = 77;
+            var svg;
+
+            /*
+            Donut Chart
+            */
+            
+            svg = d3.select("#donut")
+                .append("svg")
                 .attr("width", width)
                 .attr("height", height)
-            .append("g")
+                .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-            var percentScale = d3.scaleLinear().domain([0, 100]).range([0, 2 * Math.PI]);
+            var percentScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, 2 * Math.PI]);
+
             var data = [[0,40,"#507439"],[40,100,"#92d657"]];
 
             var arc = d3.arc()
-            .innerRadius(71)
-            .outerRadius(77)
-            .startAngle(function(d){return percentScale(d[0]);})
-            .endAngle(function(d){return percentScale(d[1]);});
+                .innerRadius(71)
+                .outerRadius(77)
+                .startAngle(function(d){return percentScale(d[0]);})
+                .endAngle(function(d){return percentScale(d[1]);});
 
             svg.selectAll("path")
-            .data(data)
-            .enter()
-            .append("path").attr("d", arc)
-            .style("fill", function(d){return d[2];});
+                .data(data)
+                .enter()
+                .append("path").attr("d", arc)
+                .style("fill", function(d){return d[2];});
 
+            /*
+            Tick Marks
+            */
 
-            var svg = d3.select("#tickMarks")
-            .append("svg")
+            svg = d3.select("#tickMarks")
+                .append("svg")
                 .attr("width", width)
                 .attr("height", height)
-            .append("g")
+                .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
             var tickMarksData = [[-0.1,0.1,"#808080"],
-                        [24.9,25.1,"#808080"],
-                        [49.9,50.1,"#808080"],
-                        [74.9,75.1,"#808080"]];
+                [24.9,25.1,"#808080"],
+                [49.9,50.1,"#808080"],
+                [74.9,75.1,"#808080"]];
 
             var tMInnerRadius = 67;
             var tMOuterRadius = 70;
 
             var tMArc = d3.arc()
-            .innerRadius(tMInnerRadius)
-            .outerRadius(tMOuterRadius)
-            .startAngle(function(d){return percentScale(d[0]);})
-            .endAngle(function(d){return percentScale(d[1]);});
+                .innerRadius(tMInnerRadius)
+                .outerRadius(tMOuterRadius)
+                .startAngle(function(d){return percentScale(d[0]);})
+                .endAngle(function(d){return percentScale(d[1]);});
 
             svg.selectAll("path")
-            .data(tickMarksData)
-            .enter()
-            .append("path").attr("d", tMArc)
-            .style("fill", function(d){return d[2];});
+                .data(tickMarksData)
+                .enter()
+                .append("path").attr("d", tMArc)
+                .style("fill", function(d){return d[2];});
 
+            /*
+            Area Graph
+            */
 
             //random graph data, ugly, better use a rate
             var areaChartData = [];
@@ -191,52 +209,51 @@
                 areaChartData.push([i,current]);
             }
 
-            var svg = d3.select("#areaGraph")
-            .append("svg")
+            svg = d3.select("#areaGraph")
+                .append("svg")
                 .attr("width", width)
                 .attr("height", height)
-            .append("g")
+                .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+            //circle mask applied to the area chart
+            svg.append("clipPath")
+                .attr("id", "circleClip")
+                .append("ellipse")
+                .attr("cx", 0)          //x-centre
+                .attr("cy", 0)          //y-centre
+                .attr("rx", width/2-12) //x radius
+                .attr("ry", width/2-12);//y radius
 
-            svg.append("clipPath")       // define a clip path
-            .attr("id", "circleClip") // give the clipPath an ID
-            .append("ellipse")            // shape it as an ellipse
-            .attr("cx", 0)            // position the x-centre
-            .attr("cy", 0)            // position the y-centre
-            .attr("rx", width/2-12)            // set the x radius
-            .attr("ry", width/2-12);
-
-            //100 item indexes used as x scaled onto area's width
+            //100 item indexes used as x, scaled onto area's width
             var x = d3.scaleLinear()
-            .domain([0,100])
-            .range([ -width/2, width/2 ]);
+                .domain([0,100])
+                .range([ -width/2, width/2 ]);
 
             //item values start at 25 and stay below 100, scaled onto area's height
             var y = d3.scaleLinear()
-            .domain([0,100])
-            .range([ height/2,-height/2 ]);
+                .domain([0,100])
+                .range([ height/2,-height/2 ]);
 
             /*svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .attr("transform", "scaleY(-1)")*/
-
                 
             // Add the area
             svg.append("path")
-            .datum(areaChartData)
-            .attr("fill", "#507439")
-            .attr("fill-opacity", 0.1)
-            .attr("stroke", "#507439")
-            .attr("stroke-width", 1.5)
-            .attr("stroke-opacity", 0.3)
-            .attr("clip-path","url(#circleClip)")
-            .attr("d", d3.area()
-                .x(function(d) { return x(d[0]) })
-                .y0(y(0))
-                .y1(function(d) { return y(d[1]) })
+                .datum(areaChartData)
+                .attr("fill", "#507439")
+                .attr("fill-opacity", 0.1)
+                .attr("stroke", "#507439")
+                .attr("stroke-width", 1.5)
+                .attr("stroke-opacity", 0.3)
+                .attr("clip-path","url(#circleClip)")
+                .attr("d", d3.area()
+                    .x(function(d) { return x(d[0]) })
+                    .y0(y(0))
+                    .y1(function(d) { return y(d[1]) })
                 )
-    
+
         </script>
     </body>
 </html>
