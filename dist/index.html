@@ -3,20 +3,30 @@
   <head>
     <title>Donut Chart</title>
     <script src="main.js"></script>
+    <style>
+      .donutChart{
+        display: inline-block;
+      }
+    </style>
   </head>
   <body>
     <script>
       const request = new XMLHttpRequest();
-      const url='http://localhost:8000/donuts';
+      const url='http://192.168.1.211:8000/donuts';
       request.open("GET", url);
       request.send();
 
       request.onreadystatechange = (e) => {
         const res = request.responseText;
+        if(!request.responseText) {
+          return;
+        }else{
+          request.onreadystatechange = null;
+        }
         const jRes = JSON.parse(res);
         for(let i=0;i<jRes.data.length;i++){
-          console.log(jRes.data[i]);
           let donut = document.createElement("donut-trio");
+          donut.setAttribute("class","donutChart");
           donut.data = jRes.data[i];
           document.body.appendChild(donut);
         }
