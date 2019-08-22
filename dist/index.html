@@ -1,10 +1,26 @@
 <!doctype html>
 <html>
   <head>
-    <title>Pie dev</title>
+    <title>Donut Chart</title>
+    <script src="main.js"></script>
   </head>
   <body>
-    <script src="main.js"></script>
-    <pie-chart />
+    <script>
+      const request = new XMLHttpRequest();
+      const url='http://localhost:8000/donuts';
+      request.open("GET", url);
+      request.send();
+
+      request.onreadystatechange = (e) => {
+        const res = request.responseText;
+        const jRes = JSON.parse(res);
+        for(let i=0;i<jRes.data.length;i++){
+          console.log(jRes.data[i]);
+          let donut = document.createElement("donut-trio");
+          donut.data = jRes.data[i];
+          document.body.appendChild(donut);
+        }
+      }
+    </script>
   </body>
 </html>

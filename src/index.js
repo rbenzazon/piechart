@@ -1,3 +1,4 @@
-import Pie from './Pie';
-
-customElements.define('pie-chart', Pie, { extends: 'div' });
+import {DonutTrio} from './DonutTrio';
+if (!customElements.get('donut-trio')) {
+    window.customElements.define('donut-trio', DonutTrio);
+}
