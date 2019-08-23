@@ -1,44 +1,21 @@
 import * as d3 from "d3";
-//dev temp internal data
-//import data from "./dataProto.json";
 
 export class DonutTrio extends HTMLElement {
   constructor() {
     super();
-    // Create a shadow root
-    this._shadow = this.attachShadow({mode: 'open'});
   }
 
   //gets interpolated when adding to dom to inject external data
   getTemplate(values){
     return `
     <style>
-      body {
-          
-      }
-      html {
-          
-      }
-      /*
-      to compare with visual mockup
-      */
-      /*
-      #screenshot{
-        background-image: url("screenshot.jpg");
-      }
-      */
       .donut{
         font-family: Roboto, Arial;
         margin: 0;
         padding: 0;
         position: relative;
-        
         height: 14rem;
         width: 20rem;
-        /*border:1px solid green;box model debug*/
-      }
-      #areaGraph{
-  
       }
       #donutGraph,#tickMarks,#areaGraph{
         position: absolute;
@@ -54,20 +31,18 @@ export class DonutTrio extends HTMLElement {
         margin-top: -2.1rem;
         width: 100%;
         line-height: 1.4rem;
-        /*border:1px solid green;box model debug*/
       }
       .centerLabel{
-        color: grey;
+        color: #a1a1a1;
         font-size: 17px;
         text-transform: uppercase;
       }
       .centerValue{
-        font-size: 23px;
+        font-size: 22px;
       }
       .centerFigure{
         position: relative;
         text-align: center;
-        /*border:1px solid blue;box model debug*/
         margin-left: auto;
         margin-right: auto;
         height: 12.3rem;
@@ -88,6 +63,7 @@ export class DonutTrio extends HTMLElement {
         color: ${values.rightLabelColor};
       }
       .label{
+        text-transform: capitalize;
         font-size: 15px;
         font-weight: bold;
       }
@@ -95,7 +71,7 @@ export class DonutTrio extends HTMLElement {
         margin-right: 0.2rem;
       }
       .value{
-        color: grey;
+        color: #bdbdbd;
       }
       .rightFigure{
         text-align: right;
@@ -104,38 +80,39 @@ export class DonutTrio extends HTMLElement {
       .bottomFigures{
         width: calc(100% - 4rem);
         position: absolute;
-        border-bottom: 1px solid grey;
+        border-bottom: 1px solid #e6e6e6;
         margin-left: 1.9rem;
         bottom: 0;
       }
     </style>
     <div class="donut">
       <div class="centerFigure">
-          <div id="donutGraph" ></div>
-          <div id="tickMarks" ></div>
-          <div id="areaGraph" ></div>
-          <div class="centerFigureText">
-              <span class="centerLabel">${values.centerLabelText}</span><br>
-              <span class="centerValue">${values.centerValueText}</span>
-          </div>
+        <div id="donutGraph" ></div>
+        <div id="tickMarks" ></div>
+        <div id="areaGraph" ></div>
+        <div class="centerFigureText">
+          <span class="centerLabel">${values.centerLabelText}</span><br>
+          <span class="centerValue">${values.centerValueText}</span>
+        </div>
       </div>
       <div class="bottomFigures">
-          <div class="leftFigure">
-              <span class="label">${values.leftLabelText}</span><br>
-              <span class="percent">${values.leftPercentText}</span>
-              <span class="value">${values.leftValueText}</span>
-          </div>
-          <div class="rightFigure">
-              <span class="label">${values.rightLabelText}</span><br>
-              <span class="percent">${values.rightPercentText}</span>
-              <span class="value">${values.rightValueText}</span>
-          </div>
+        <div class="leftFigure">
+          <span class="label">${values.leftLabelText}</span><br>
+          <span class="percent">${values.leftPercentText}</span>
+          <span class="value">${values.leftValueText}</span>
+        </div>
+        <div class="rightFigure">
+          <span class="label">${values.rightLabelText}</span><br>
+          <span class="percent">${values.rightPercentText}</span>
+          <span class="value">${values.rightValueText}</span>
+        </div>
       </div>
     </div>
   `;
   }
 
   appendTemplate(data){
+    
     const template = document.createElement('template');
     template.innerHTML = this.getTemplate({
       centerLabelText:data.center.label,
@@ -154,6 +131,10 @@ export class DonutTrio extends HTMLElement {
 
   //public setter to provide data to this component
   set data(value){
+    if(this._data !== undefined) return;
+    console.log("data"+JSON.stringify(value));
+    // Creates a shadow root
+    this._shadow = this.attachShadow({mode: 'open'});
     if(value.center && value.left && value.right){
       this._data = value;
       this.appendTemplate(this._data);
@@ -185,7 +166,7 @@ export class DonutTrio extends HTMLElement {
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        .attr("transform","translate(" + width/2 +","+ height/2 +")");
 
     /*
     transforms following incoming json data
@@ -196,7 +177,11 @@ export class DonutTrio extends HTMLElement {
     let currentValue = 0;
     let donutData = [];
     for(let i=0;i<this._data.center.donut.length;i++){
-      donutData.push([currentValue,currentValue+this._data.center.donut[i].value,this._data.center.donut[i].color]);
+      donutData.push([
+        currentValue,
+        currentValue+this._data.center.donut[i].value,
+        this._data.center.donut[i].color
+      ]);
       currentValue = this._data.center.donut[i].value;
     }
 
@@ -222,7 +207,7 @@ export class DonutTrio extends HTMLElement {
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        .attr("transform", "translate("+ width/2 +","+ height/2 +")");
 
     var tickMarksData = [[-0.1,0.1],
         [24.9,25.1],
@@ -230,7 +215,7 @@ export class DonutTrio extends HTMLElement {
         [74.9,75.1]];
 
     var tMInnerRadius = 67;
-    var tMOuterRadius = 70;
+    var tMOuterRadius = 69;
 
     var tMArc = d3.arc()
         .innerRadius(tMInnerRadius)
@@ -267,7 +252,7 @@ export class DonutTrio extends HTMLElement {
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        .attr("transform", "translate("+ width/2 +","+ height/2 +")");
 
     //circle mask applied to the area chart
     svg.append("clipPath")

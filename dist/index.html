@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>Donut Chart</title>
     <script src="main.js"></script>
     <style>
@@ -12,25 +14,22 @@
   <body>
     <script>
       const request = new XMLHttpRequest();
-      const url='http://192.168.1.211:8000/donuts';
+      const url='http://localhost:8000/donuts';
       request.open("GET", url);
-      request.send();
-
       request.onreadystatechange = (e) => {
-        const res = request.responseText;
-        if(!request.responseText) {
-          return;
-        }else{
+        if(request.readyState === 4 && request.status === 200) {
+          const res = request.responseText;
+          const jRes = JSON.parse(res);
+          for(let i=0;i<jRes.data.length;i++){
+            let donut = document.createElement("donut-trio");
+            donut.setAttribute("class","donutChart");
+            donut.data = jRes.data[i];
+            document.body.appendChild(donut);
+          }
           request.onreadystatechange = null;
         }
-        const jRes = JSON.parse(res);
-        for(let i=0;i<jRes.data.length;i++){
-          let donut = document.createElement("donut-trio");
-          donut.setAttribute("class","donutChart");
-          donut.data = jRes.data[i];
-          document.body.appendChild(donut);
-        }
       }
+      request.send();
     </script>
   </body>
 </html>

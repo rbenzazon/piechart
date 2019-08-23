@@ -14,13 +14,13 @@
                         }
                     },
                     "left":{
-                        "label":"Tablet",
+                        "label":"tablet",
                         "labelColor":"#92d657",
                         "percent":"60%",
                         "value":"120.000€"
                     },
                     "right":{
-                        "label":"Smartphone",
+                        "label":"smartphone",
                         "labelColor":"#507439",
                         "percent":"40%",
                         "value":"80.000€"
@@ -37,13 +37,13 @@
                         }
                     },
                     "left":{
-                        "label":"Tablet",
+                        "label":"tablet",
                         "labelColor":"#73cae8",
                         "percent":"40%",
                         "value":"20.000.000"
                     },
                     "right":{
-                        "label":"Smartphone",
+                        "label":"smartphone",
                         "labelColor":"#2f5365",
                         "percent":"60%",
                         "value":"30.000.000"
@@ -60,13 +60,13 @@
                         }
                     },
                     "left":{
-                        "label":"Tablet",
+                        "label":"tablet",
                         "labelColor":"#edc138",
                         "percent":"80%",
                         "value":"480.000.000"
                     },
                     "right":{
-                        "label":"Smartphone",
+                        "label":"smartphone",
                         "labelColor":"#bd5921",
                         "percent":"20%",
                         "value":"120.000.000"
