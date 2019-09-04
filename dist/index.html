@@ -18,15 +18,13 @@
       request.open("GET", url);
       request.onreadystatechange = (e) => {
         if(request.readyState === 4 && request.status === 200) {
-          const res = request.responseText;
-          const jRes = JSON.parse(res);
-          for(let i=0;i<jRes.data.length;i++){
+          request.onreadystatechange = null;
+          JSON.parse(request.responseText).data.forEach((data)=>{
             let donut = document.createElement("donut-trio");
             donut.setAttribute("class","donutChart");
-            donut.data = jRes.data[i];
             document.body.appendChild(donut);
-          }
-          request.onreadystatechange = null;
+            donut.data = data;
+          });
         }
       }
       request.send();
