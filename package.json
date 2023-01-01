@@ -22,8 +22,8 @@
   "homepage": "https://github.com/rbenzazon/piechart#readme",
   "devDependencies": {
     "growl": "^1.10.2",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
